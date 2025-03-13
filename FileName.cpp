@@ -5,18 +5,18 @@
 #include <functional>
 #include <random>
 
-// Griewankº¯Êı£¨n=2£©
+// Griewankå‡½æ•°ï¼ˆn=2ï¼‰
 double griewank(const std::vector<double>&x) {
     double sum = 0.0;
     double product = 1.0;
     for (size_t i = 0; i < x.size(); ++i) {
         sum += x[i] * x[i];
-        product *= std::cos(x[i] / std::sqrt(i + 1)); // i´Ó0¿ªÊ¼£¬¹«Ê½ÖĞi´Ó1¿ªÊ¼
+        product *= std::cos(x[i] / std::sqrt(i + 1)); // iä»0å¼€å§‹ï¼Œå…¬å¼ä¸­iä»1å¼€å§‹
     }
     return 1 + sum / 4000.0 - product;
 }
 
-// Rastriginº¯Êı£¨n=2£©
+// Rastriginå‡½æ•°ï¼ˆn=2ï¼‰
 double rastrigin(const std::vector<double>& x) {
     double sum = 0.0;
     for (size_t i = 0; i < x.size(); ++i) {
@@ -25,7 +25,7 @@ double rastrigin(const std::vector<double>& x) {
     return 20.0 + sum;
 }
 
-// Á£×Ó½á¹¹Ìå
+// ç²’å­ç»“æ„ä½“
 struct Particle {
     std::vector<double> position;
     std::vector<double> velocity;
@@ -33,7 +33,7 @@ struct Particle {
     double best_fitness;
 };
 
-// PSOÀà
+// PSOç±»
 class PSO {
 public:
     PSO(int num_particles, int dim, double w, double c1, double c2, int max_iter,
@@ -41,7 +41,7 @@ public:
         : num_particles(num_particles), dim(dim), w(w), c1(c1), c2(c2),
         max_iter(max_iter), lower_bound(lower_bound), upper_bound(upper_bound),
         gen(std::random_device{}()), dist(0.0, 1.0) {
-        // ³õÊ¼»¯Á£×ÓÈº
+        // åˆå§‹åŒ–ç²’å­ç¾¤
         particles.resize(num_particles);
         for (auto& p : particles) {
             p.position.resize(dim);
@@ -51,7 +51,7 @@ public:
                 p.position[i] = lower_bound[i] + (upper_bound[i] - lower_bound[i]) * dist(gen);
                 p.velocity[i] = 0.0;
             }
-            double fitness = griewank(p.position); // ÁÙÊ±Öµ£¬ºóĞøoptimizeÊ±»á¸²¸Ç
+            double fitness = griewank(p.position); // ä¸´æ—¶å€¼ï¼Œåç»­optimizeæ—¶ä¼šè¦†ç›–
             p.best_position = p.position;
             p.best_fitness = fitness;
             if (fitness < global_best_fitness) {
@@ -62,7 +62,7 @@ public:
     }
 
     void optimize(const std::function<double(const std::vector<double>&)>& fitness_func) {
-        // ÖØĞÂ³õÊ¼»¯È«¾Ö×îÓÅ
+        // é‡æ–°åˆå§‹åŒ–å…¨å±€æœ€ä¼˜
         global_best_fitness = std::numeric_limits<double>::max();
         for (auto& p : particles) {
             double fitness = fitness_func(p.position);
@@ -75,7 +75,7 @@ public:
 
         for (int iter = 0; iter < max_iter; ++iter) {
             for (auto& p : particles) {
-                // ¸üĞÂËÙ¶È
+                // æ›´æ–°é€Ÿåº¦
                 for (int i = 0; i < dim; ++i) {
                     double r1 = dist(gen);
                     double r2 = dist(gen);
@@ -84,7 +84,7 @@ public:
                         + c2 * r2 * (global_best_position[i] - p.position[i]);
                 }
 
-                // ¸üĞÂÎ»ÖÃ²¢´¦Àí±ß½ç
+                // æ›´æ–°ä½ç½®å¹¶å¤„ç†è¾¹ç•Œ
                 for (int i = 0; i < dim; ++i) {
                     p.position[i] += p.velocity[i];
                     if (p.position[i] < lower_bound[i]) {
@@ -97,16 +97,16 @@ public:
                     }
                 }
 
-                // ¼ÆËãÊÊÓ¦¶È
+                // è®¡ç®—é€‚åº”åº¦
                 double current_fitness = fitness_func(p.position);
 
-                // ¸üĞÂ¸öÌå×îÓÅ
+                // æ›´æ–°ä¸ªä½“æœ€ä¼˜
                 if (current_fitness < p.best_fitness) {
                     p.best_fitness = current_fitness;
                     p.best_position = p.position;
                 }
 
-                // ¸üĞÂÈ«¾Ö×îÓÅ
+                // æ›´æ–°å…¨å±€æœ€ä¼˜
                 if (current_fitness < global_best_fitness) {
                     global_best_fitness = current_fitness;
                     global_best_position = p.position;
@@ -116,12 +116,12 @@ public:
     }
 
     void print_result() const {
-        std::cout << "×îÓÅ½â: (";
+        std::cout << "æœ€ä¼˜è§£: (";
         for (size_t i = 0; i < global_best_position.size(); ++i) {
             std::cout << global_best_position[i];
             if (i != global_best_position.size() - 1) std::cout << ", ";
         }
-        std::cout << ")\nÊÊÓ¦¶ÈÖµ: " << global_best_fitness << std::endl;
+        std::cout << ")\né€‚åº”åº¦å€¼: " << global_best_fitness << std::endl;
     }
 
 private:
@@ -141,18 +141,18 @@ private:
 };
 
 int main() {
-    // Çó½âGriewankº¯Êı
+    // æ±‚è§£Griewankå‡½æ•°
     {
-        std::cout << "==== Griewankº¯ÊıÓÅ»¯ ====\n";
+        std::cout << "==== Griewankå‡½æ•°ä¼˜åŒ– ====\n";
         PSO pso(30, 2, 0.5, 2.0, 2.0, 1000, { -5.0, -5.0 }, { 5.0, 5.0 });
         pso.optimize(griewank);
         pso.print_result();
     }
 
-    // Çó½âRastriginº¯Êı
+    // æ±‚è§£Rastriginå‡½æ•°
     {
-        std::cout << "\n==== Rastriginº¯ÊıÓÅ»¯ ====\n";
-        PSO pso(50, 2, 0.5, 2.0, 2.0, 1000, { -5.12, -5.12 }, { 5.12, 5.12 });
+        std::cout << "\n==== Rastriginå‡½æ•°ä¼˜åŒ– ====\n";
+        PSO pso(50, 2, 0.5, 2.0, 2.0, 1000, { -5.1, -5.12 }, { 5.12, 5.12 });
         pso.optimize(rastrigin);
         pso.print_result();
     }
