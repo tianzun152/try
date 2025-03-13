@@ -152,7 +152,7 @@ int main() {
     // 求解Rastrigin函数
     {
         std::cout << "\n==== Rastrigin函数优化 ====\n";
-        PSO pso(50, 2, 0.5, 2.0, 2.0, 1000, { -5.1, -5.12 }, { 5.12, 5.12 });
+        PSO pso(50, 2, 0.5, 2.0, 2.0, 1000, { -5.1, -5.1 }, { 5.12, 5.12 });
         pso.optimize(rastrigin);
         pso.print_result();
     }
